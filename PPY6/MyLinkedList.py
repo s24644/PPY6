@@ -9,47 +9,76 @@ class MyLinkedList:
 
     def __str__(self):
         result = ""
-        current_node = self.head
-        while current_node is not None:
-            result += str(current_node.data) + ", "
-            current_node = current_node.nextE
-        return result
+        current = self.head
+        while current:
+            result = result + str(current.data) + ', '
+            current = current.nextE
+        return result[0:len(result)-2]
 
     def get(self, e):
-        current_node = self.head
-        while current_node is not None:
-            if current_node.data == e.data:
-                return current_node
-            current_node = current_node.nextE
-        return "Nie ma takiego elementu"
-
-    def delete(self, e):
-        tmp = self.head
-        previous = Element.Element
-
-        if tmp is not None:
-            if tmp.data == e.data:
-                self.head = tmp.nextE
-                tmp = None
-                return
-
-        while tmp is not None:
-            if tmp.data == e.data:
-                break
-            previous = tmp
-            tmp = tmp.nextE
-
-        if tmp is None:
+        if self.head.data == e:
+            self.head = self.head.nextE
             return
 
-        previous.nextE = tmp.nextE
+        current = self.head
+        while current:
+            if current.data == e:
+                break
+            current = current.nextE
 
-        tmp = None
+        if current is None:
+            print("Nie znaleziono podanej wartości")
+            return
+        else:
+            return current.data
+
+    def delete(self, e):
+        if self.head.data == e:
+            self.head = self.head.nextE
+            return
+
+        current = self.head
+        while current:
+            if current.data == e:
+                break
+            previous = current
+            current = current.nextE
+
+        if current is None:
+            print("Nie znaleziono podanej wartości")
+        else:
+            previous.nextE = current.nextE
 
     def append(self, e, func=None):
         new_element = Element(e)
-        new_element.nextE = self.head
-        self.head = new_element
+
+        if self.head is None:
+            self.head = new_element
+
+        if func is None:
+            if self.head.data >= new_element.data:
+                new_element.nextE = self.head
+                self.head = new_element
+
+            else:
+                current = self.head
+                while current.nextE and new_element.data > current.nextE.data:
+                    current = current.nextE
+
+                new_element.nextE = current.nextE
+                current.nextE = new_element
+        else:
+            if func(self.head.data, new_element.data):
+                new_element.nextE = self.head
+                self.head = new_element
+
+            else:
+                current = self.head
+                while current.nextE and new_element.data > current.nextE.data:
+                    current = current.nextE
+
+                new_element.nextE = current.nextE
+                current.nextE = new_element
 
 
 
